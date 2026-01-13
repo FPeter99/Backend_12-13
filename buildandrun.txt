@@ -1,0 +1,32 @@
+neu@nd:~/forgacs-peter-frosty$ docker build -t fp/frosty -f Frosty.Dockerfile .
+[+] Building 3.1s (15/15) FINISHED                                                              docker:default
+ => [internal] load build definition from Frosty.Dockerfile                                               0.0s
+ => => transferring dockerfile: 554B                                                                      0.0s
+ => [internal] load metadata for docker.io/library/composer:2.8.9                                         0.4s
+ => [internal] load metadata for docker.io/library/php:8.4.8-cli-alpine3.22                               0.4s
+ => [internal] load .dockerignore                                                                         0.0s
+ => => transferring context: 2B                                                                           0.0s
+ => [stage-0 1/8] FROM docker.io/library/php:8.4.8-cli-alpine3.22@sha256:c9b1ab69749902c0e8ccd4424ca81e4  0.0s
+ => [internal] load build context                                                                         0.0s
+ => => transferring context: 49.41kB                                                                      0.0s
+ => FROM docker.io/library/composer:2.8.9@sha256:69d57c07ed077bc22d6e584202b6d9160f636abdb6df25c7c437ded  0.0s
+ => CACHED [stage-0 2/8] WORKDIR /app                                                                     0.0s
+ => CACHED [stage-0 3/8] RUN adduser -D -u 1000 -s /bin/bash phpdocker     && apk update     && apk add   0.0s
+ => CACHED [stage-0 4/8] COPY --from=composer:2.8.9 /usr/bin/composer /usr/bin/composer                   0.0s
+ => [stage-0 5/8] COPY . .                                                                                0.5s
+ => [stage-0 6/8] RUN mkdir -p /app/out && chown -R phpdocker:phpdocker /app/out                          0.4s
+ => [stage-0 7/8] RUN composer install --no-interaction --optimize-autoloader                             0.7s
+ => [stage-0 8/8] RUN composer dump-autoload -o                                                           0.6s 
+ => exporting to image                                                                                    0.3s 
+ => => exporting layers                                                                                   0.1s 
+ => => writing image sha256:0c03980eef56daae682e4f34e15241c8a23a072063737414ad8abb26b9822632              0.0s 
+ => => naming to docker.io/fp/frosty                                                                      0.0s 
+neu@nd:~/forgacs-peter-frosty$ docker run fp/frosty 2
+
+Warning: require_once(/app/src/IceCream.php): Failed to open stream: No such file or directory in /app/demo.php on line 5
+
+Fatal error: Uncaught Error: Failed opening required '/app/src/IceCream.php' (include_path='.:/usr/local/lib/php') in /app/demo.php:5
+Stack trace:
+#0 {main}
+  thrown in /app/demo.php on line 5
+neu@nd:~/forgacs-peter-frosty$ 
